@@ -1,10 +1,10 @@
 # Blender Shortcuts — Cheat Sheet
 
-A static page of the most useful Blender keyboard shortcuts, grouped by mode (Object, Edit, Sculpt, Animation, etc.). Single `index.html`, no dependencies, no build step. English-first with Polish translations underneath.
+A static page of the most useful Blender keyboard shortcuts, grouped by mode (Object, Edit, Mesh Cleanup, Sculpt, Texture Paint, Animation, etc.). Single `index.html`, no dependencies, no build step. English-first with Polish translations underneath.
 
 ## Features
 - 🔍 Search shortcuts (press `/` to focus, `Esc` to clear) — works in both English and Polish
-- 🏷️ Filter by mode/tab: Object, Edit, Sculpt, Animation, Navigation, Selection, General
+- 🏷️ Filter by mode/tab: General, Transform, Object, Edit, Mesh Cleanup, Sculpt, Texture Paint, Selection, Animation, Navigation, UV, Shader Nodes
 - 🌗 Light / dark theme (remembered)
 - 📱 Responsive layout
 - ⚡ G/R/S hero + Top 5 to learn first

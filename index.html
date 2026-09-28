@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blender Shortcuts — Cheat Sheet</title>
-<meta name="description" content="The most useful Blender keyboard shortcuts in a clean, modern layout. Object mode, Edit mode, Sculpt mode, Animation, Navigation and more.">
+<meta name="description" content="The most useful Blender keyboard shortcuts in a clean, modern layout. Object mode, Edit mode, Mesh cleanup, Sculpt mode, Texture paint, UV, Animation, Navigation and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
@@ -392,6 +392,7 @@ const DATA = [
     { label:"Display", labelPl:"Wyświetlanie", items:[
       { keys:["Z"], action:"Shading pie menu", actionPl:"Pie menu cieniowania", doc:"editors/3dview/display/shading.html" },
       { keys:["Shift","Z"], combo:true, action:"Toggle wireframe", actionPl:"Przełącz wireframe", doc:"editors/3dview/display/shading.html" },
+      { keys:["Alt","Z"], combo:true, action:"Toggle X-Ray", actionPl:"Przełącz X-Ray", hint:"box select grabs hidden geometry too", hintPl:"box select łapie też geometrię z tyłu", doc:"editors/3dview/introduction.html" },
       { keys:["Numpad ."], action:"Frame selected object", actionPl:"Wykadruj zaznaczony obiekt", doc:"editors/3dview/navigate/navigation.html" },
     ]},
   ]},
@@ -400,15 +401,21 @@ const DATA = [
       { keys:["1"], action:"Vertex select mode", actionPl:"Tryb zaznaczania wierzchołków", doc:"modeling/meshes/selecting/introduction.html" },
       { keys:["2"], action:"Edge select mode", actionPl:"Tryb zaznaczania krawędzi", doc:"modeling/meshes/selecting/introduction.html" },
       { keys:["3"], action:"Face select mode", actionPl:"Tryb zaznaczania ścian", doc:"modeling/meshes/selecting/introduction.html" },
+      { keys:["Shift","1"], combo:true, action:"Add select mode (combine)", actionPl:"Dołóż tryb zaznaczania (łącz)", hint:"also Shift+2 / Shift+3", hintPl:"także Shift+2 / Shift+3", doc:"modeling/meshes/selecting/introduction.html" },
       { keys:["Alt","Click"], combo:true, action:"Select edge / face loop", actionPl:"Zaznacz pętlę krawędzi / ścian", doc:"modeling/meshes/selecting/loops.html" },
       { keys:["Ctrl","Alt","Click"], combo:true, action:"Select ring", actionPl:"Zaznacz pierścień", doc:"modeling/meshes/selecting/loops.html" },
+      { keys:["Shift","G"], combo:true, action:"Select similar menu", actionPl:"Menu zaznaczania podobnych", hint:"by sides, length, material, angle…", hintPl:"wg boków, długości, materiału, kąta…", doc:"modeling/meshes/selecting/similar.html" },
     ]},
     { label:"Modeling tools", labelPl:"Narzędzia modelowania", items:[
       { keys:["E"], action:"Extrude", actionPl:"Wytłocz", doc:"modeling/meshes/editing/mesh/extrude.html" },
       { keys:["Alt","E"], combo:true, action:"Extrude menu", actionPl:"Menu wytłaczania", doc:"modeling/meshes/editing/mesh/extrude.html" },
       { keys:["I"], action:"Inset faces", actionPl:"Wstaw (inset) ściany", doc:"modeling/meshes/editing/face/inset_faces.html" },
-      { keys:["Ctrl","B"], combo:true, action:"Bevel", actionPl:"Faza (bevel)", doc:"modeling/meshes/editing/edge/bevel.html" },
-      { keys:["Ctrl","R"], combo:true, action:"Loop cut", actionPl:"Cięcie pętlą (loop cut)", doc:"modeling/meshes/tools/loop.html" },
+      { keys:["Ctrl","B"], combo:true, action:"Bevel", actionPl:"Faza (bevel)", hint:"scroll adds segments", hintPl:"scroll dodaje segmenty", doc:"modeling/meshes/editing/edge/bevel.html" },
+      { keys:["Ctrl","Shift","B"], combo:true, action:"Bevel vertices", actionPl:"Faza na wierzchołkach", doc:"modeling/meshes/editing/edge/bevel.html" },
+      { keys:["Ctrl","R"], combo:true, action:"Loop cut", actionPl:"Cięcie pętlą (loop cut)", hint:"scroll = more cuts, RMB = keep centered", hintPl:"scroll = więcej cięć, PPM = zostaw na środku", doc:"modeling/meshes/editing/edge/loopcut_slide.html" },
+      { keys:["G","G"], action:"Edge / vertex slide", actionPl:"Przesuń wzdłuż powierzchni (slide)", hint:"press G twice", hintPl:"naciśnij G dwa razy", doc:"modeling/meshes/editing/edge/edge_slide.html" },
+      { keys:["Alt","S"], combo:true, action:"Shrink / fatten along normals", actionPl:"Zwęź / pogrub wzdłuż normalnych", doc:"modeling/meshes/editing/mesh/transform/shrink-fatten.html" },
+      { keys:["J"], action:"Connect vertex path", actionPl:"Połącz wierzchołki ścieżką", hint:"splits n-gons, reroutes loops", hintPl:"dzieli n-gony, przekierowuje loopy", doc:"modeling/meshes/editing/vertex/connect_vertex_path.html" },
       { keys:["K"], action:"Knife tool", actionPl:"Narzędzie nóż", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
       { keys:["F"], action:"Make edge / face", actionPl:"Utwórz krawędź / ścianę", doc:"modeling/meshes/editing/vertex/make_face_edge.html" },
       { keys:["Ctrl","E"], combo:true, action:"Edge menu (seam, crease…)", actionPl:"Menu krawędzi (seam, crease…)", doc:"modeling/meshes/editing/edge/index.html" },
@@ -416,17 +423,51 @@ const DATA = [
       { keys:["Ctrl","V"], combo:true, action:"Vertex menu", actionPl:"Menu wierzchołków", doc:"modeling/meshes/editing/vertex/index.html" },
     ]},
     { label:"Cleanup", labelPl:"Porządkowanie", items:[
-      { keys:["M"], action:"Merge vertices", actionPl:"Scal wierzchołki", doc:"modeling/meshes/editing/mesh/merge.html" },
+      { keys:["M"], action:"Merge menu", actionPl:"Menu scalania", hint:"M → By Distance removes doubles", hintPl:"M → By Distance usuwa zdublowane wierzchołki", doc:"modeling/meshes/editing/mesh/merge.html" },
       { keys:["P"], action:"Separate selection", actionPl:"Oddziel zaznaczenie", doc:"modeling/meshes/editing/mesh/separate.html" },
-      { keys:["X"], action:"Delete menu", actionPl:"Menu usuwania", doc:"modeling/meshes/editing/mesh/delete.html" },
-      { keys:["Ctrl","X"], combo:true, action:"Dissolve", actionPl:"Rozpuść (dissolve)", doc:"modeling/meshes/editing/mesh/delete.html" },
-      { keys:["Alt","M"], combo:true, action:"Merge by distance", actionPl:"Scal wg odległości", doc:"modeling/meshes/editing/mesh/merge.html" },
+      { keys:["X"], action:"Delete menu", actionPl:"Menu usuwania", hint:"leaves a hole", hintPl:"zostawia dziurę", doc:"modeling/meshes/editing/mesh/delete.html" },
+      { keys:["Ctrl","X"], combo:true, action:"Dissolve", actionPl:"Rozpuść (dissolve)", hint:"keeps the surface closed", hintPl:"zachowuje ciągłość powierzchni", doc:"modeling/meshes/editing/mesh/delete.html" },
+      { keys:["Y"], action:"Split selection", actionPl:"Oderwij zaznaczenie (split)", doc:"modeling/meshes/editing/mesh/split.html" },
+      { keys:["Alt","M"], combo:true, action:"Split menu", actionPl:"Menu rozdzielania (split)", doc:"modeling/meshes/editing/mesh/split.html" },
     ]},
     { label:"Selection", labelPl:"Zaznaczanie", items:[
       { keys:["L"], action:"Select linked under cursor", actionPl:"Zaznacz połączone pod kursorem", doc:"modeling/meshes/selecting/linked.html" },
       { keys:["Ctrl","L"], combo:true, action:"Select linked", actionPl:"Zaznacz połączone", doc:"modeling/meshes/selecting/linked.html" },
       { keys:["Ctrl","Numpad +"], combo:true, action:"Grow selection", actionPl:"Powiększ zaznaczenie", doc:"modeling/meshes/selecting/more_less.html" },
       { keys:["Ctrl","Numpad -"], combo:true, action:"Shrink selection", actionPl:"Zmniejsz zaznaczenie", doc:"modeling/meshes/selecting/more_less.html" },
+    ]},
+    { label:"Knife (while cutting)", labelPl:"Nóż (w trakcie cięcia)", items:[
+      { keys:["C"], action:"Toggle cut through", actionPl:"Przełącz cięcie na wylot", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
+      { keys:["A"], action:"Toggle angle snapping", actionPl:"Przełącz przyciąganie kąta", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
+      { keys:["RMB"], action:"Start a new cut line", actionPl:"Zacznij nową linię cięcia", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
+      { keys:["Shift"], action:"Snap to edge midpoints (hold)", actionPl:"Przyciągaj do środków krawędzi (przytrzymaj)", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
+      { keys:["Enter"], action:"Confirm cut", actionPl:"Zatwierdź cięcie", hint:"or Space", hintPl:"lub Spacja", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
+    ]},
+  ]},
+  { cat:"Mesh Cleanup", catPl:"Czyszczenie siatki", emoji:"🧹", groups:[
+    { label:"Normals", labelPl:"Normalne", items:[
+      { keys:["Shift","N"], combo:true, action:"Recalculate normals outside", actionPl:"Przelicz normalne na zewnątrz", hint:"fix non-manifold first", hintPl:"najpierw napraw non-manifold", doc:"modeling/meshes/editing/mesh/normals.html" },
+      { keys:["Ctrl","Shift","N"], combo:true, action:"Recalculate normals inside", actionPl:"Przelicz normalne do wewnątrz", doc:"modeling/meshes/editing/mesh/normals.html" },
+      { keys:["Alt","N"], combo:true, action:"Normals menu (flip…)", actionPl:"Menu normalnych (flip…)", doc:"modeling/meshes/editing/mesh/normals.html" },
+    ]},
+    { label:"Triangles & quads", labelPl:"Trójkąty i quady", items:[
+      { keys:["Ctrl","T"], combo:true, action:"Triangulate faces", actionPl:"Trianguluj ściany", doc:"modeling/meshes/editing/face/triangulate_faces.html" },
+      { keys:["Alt","J"], combo:true, action:"Tris to quads", actionPl:"Trójkąty na quady", hint:"Ctrl+T → Alt+J fixes n-gons in bulk", hintPl:"Ctrl+T → Alt+J hurtowo naprawia n-gony", doc:"modeling/meshes/editing/face/triangles_quads.html" },
+    ]},
+    { label:"Find problems (no default key)", labelPl:"Wyszukaj błędy (bez skrótu)", items:[
+      { keys:["F3"], action:"Select Non Manifold", actionPl:"Zaznacz non-manifold", hint:"holes, 3+ face edges · vertex/edge mode only", hintPl:"dziury, krawędzie z 3+ ścianami · tylko tryb wierzchołków/krawędzi", doc:"modeling/meshes/selecting/all_by_trait.html" },
+      { keys:["F3"], action:"Select Interior Faces", actionPl:"Zaznacz ściany wewnętrzne", hint:"type the name in F3 · Select ▸ Select All by Trait", hintPl:"wpisz nazwę w F3", doc:"modeling/meshes/selecting/all_by_trait.html" },
+      { keys:["F3"], action:"Select Faces by Sides", actionPl:"Zaznacz ściany wg liczby boków", hint:"Greater Than 4 = n-gons", hintPl:"Greater Than 4 = n-gony", doc:"modeling/meshes/selecting/all_by_trait.html" },
+    ]},
+    { label:"Clean Up menu (no default key)", labelPl:"Menu Clean Up (bez skrótu)", items:[
+      { keys:["F3"], action:"Delete Loose", actionPl:"Usuń luźną geometrię", hint:"type the name in F3 · Mesh ▸ Clean Up", hintPl:"wpisz nazwę w F3", doc:"modeling/meshes/editing/mesh/cleanup.html" },
+      { keys:["F3"], action:"Degenerate Dissolve", actionPl:"Rozpuść zdegenerowane", hint:"zero-length edges, zero-area faces", hintPl:"krawędzie o zerowej długości, ściany o zerowym polu", doc:"modeling/meshes/editing/mesh/cleanup.html" },
+      { keys:["F3"], action:"Fill Holes", actionPl:"Wypełnij dziury", hint:"type the name in F3 · Mesh ▸ Clean Up", hintPl:"wpisz nazwę w F3", doc:"modeling/meshes/editing/mesh/cleanup.html" },
+      { keys:["F3"], action:"Limited Dissolve", actionPl:"Rozpuszczanie ograniczone", hint:"merges coplanar faces · makes n-gons", hintPl:"łączy ściany w jednej płaszczyźnie · tworzy n-gony", doc:"modeling/meshes/editing/mesh/delete.html" },
+    ]},
+    { label:"Patch & bridge (no default key)", labelPl:"Łatanie i mostki (bez skrótu)", items:[
+      { keys:["F3"], action:"Grid Fill", actionPl:"Wypełnij siatką (grid fill)", hint:"quads instead of a triangle fan · even edge count", hintPl:"quady zamiast wachlarza trójkątów · parzysta liczba krawędzi", doc:"modeling/meshes/editing/face/grid_fill.html" },
+      { keys:["F3"], action:"Bridge Edge Loops", actionPl:"Połącz pętle krawędzi (bridge)", doc:"modeling/meshes/editing/edge/bridge_edge_loops.html" },
     ]},
   ]},
   { cat:"Sculpt Mode", catPl:"Tryb Sculpt", emoji:"🗿", groups:[
@@ -451,8 +492,25 @@ const DATA = [
     ]},
     { label:"Mesh & symmetry", labelPl:"Siatka i symetria", items:[
       { keys:["X"], action:"Toggle X-axis symmetry", actionPl:"Przełącz symetrię osi X", doc:"sculpt_paint/sculpting/tool_settings/symmetry.html" },
-      { keys:["Ctrl","R"], combo:true, action:"Remesh", actionPl:"Remesh (przebuduj siatkę)", doc:"sculpt_paint/sculpting/tool_settings/remesh.html" },
-      { keys:["R"], action:"Rotate brush (textured)", actionPl:"Obróć pędzel (z teksturą)", doc:"sculpt_paint/sculpting/tool_settings/brush_settings.html" },
+      { keys:["Ctrl","R"], combo:true, action:"Voxel remesh", actionPl:"Voxel remesh (przebuduj siatkę)", doc:"modeling/meshes/retopology.html" },
+      { keys:["R"], action:"Edit voxel size (interactive)", actionPl:"Ustaw rozmiar voxela (interaktywnie)", hint:"detail size with Dyntopo", hintPl:"rozmiar detalu przy Dyntopo", doc:"modeling/meshes/retopology.html" },
+    ]},
+  ]},
+  { cat:"Texture Paint", catPl:"Malowanie tekstur", emoji:"🖌", groups:[
+    { label:"Brush", labelPl:"Pędzel", items:[
+      { keys:["F"], action:"Change brush size", actionPl:"Zmień rozmiar pędzla", doc:"sculpt_paint/brush/brush_settings.html" },
+      { keys:["Shift","F"], combo:true, action:"Change brush strength", actionPl:"Zmień siłę pędzla", doc:"sculpt_paint/brush/brush_settings.html" },
+      { keys:["Ctrl","F"], combo:true, action:"Rotate brush texture", actionPl:"Obróć teksturę pędzla", doc:"sculpt_paint/brush/brush_settings.html" },
+      { keys:["Shift","Space"], combo:true, action:"Brush asset popup", actionPl:"Wybór pędzla (asset shelf)", hint:"brushes are assets since 4.3", hintPl:"pędzle są assetami od 4.3", doc:"sculpt_paint/texture_paint/index.html" },
+    ]},
+    { label:"Color & mask", labelPl:"Kolor i maska", items:[
+      { keys:["X"], action:"Swap primary / secondary color", actionPl:"Zamień kolor główny / dodatkowy", doc:"sculpt_paint/brush/brush_settings.html" },
+      { keys:["Shift","X"], combo:true, action:"Sample color", actionPl:"Pobierz kolor (próbnik)", hint:"Ctrl+Shift+X samples merged", hintPl:"Ctrl+Shift+X pobiera z połączonych warstw", doc:"sculpt_paint/brush/brush_settings.html" },
+      { keys:["1"], action:"Toggle face selection mask", actionPl:"Przełącz maskę zaznaczonych ścian", hint:"paint only faces selected in Edit Mode", hintPl:"maluj tylko ściany zaznaczone w Edit Mode", doc:"sculpt_paint/selection_visibility.html" },
+    ]},
+    { label:"Save textures", labelPl:"Zapis tekstur", items:[
+      { keys:["Alt","S"], combo:true, action:"Save image", actionPl:"Zapisz obraz", hint:"Image Editor · Ctrl+S saves only the .blend", hintPl:"Image Editor · Ctrl+S zapisuje tylko .blend", doc:"editors/image/editing.html" },
+      { keys:["Shift","Alt","S"], combo:true, action:"Save image as…", actionPl:"Zapisz obraz jako…", doc:"editors/image/editing.html" },
     ]},
   ]},
   { cat:"Selection", catPl:"Zaznaczanie", emoji:"🎯", groups:[
@@ -527,7 +585,14 @@ const DATA = [
       { keys:["L"], action:"Select linked UVs", actionPl:"Zaznacz połączone UV", doc:"editors/uv/index.html" },
       { keys:["G"], action:"Move UVs", actionPl:"Przesuń UV", doc:"editors/uv/index.html" },
       { keys:["S"], action:"Scale UVs", actionPl:"Skaluj UV", doc:"editors/uv/index.html" },
-      { keys:["V"], action:"Stitch / weld UVs", actionPl:"Zszyj / złącz UV", doc:"modeling/meshes/uv/editing.html" },
+      { keys:["Alt","V"], combo:true, action:"Stitch UVs", actionPl:"Zszyj UV", doc:"modeling/meshes/uv/editing.html" },
+      { keys:["V"], action:"Rip UVs", actionPl:"Rozerwij UV (rip)", doc:"modeling/meshes/uv/editing.html" },
+      { keys:["Y"], action:"Split selection to new island", actionPl:"Oderwij zaznaczenie w nową wyspę", doc:"modeling/meshes/uv/editing.html" },
+    ]},
+    { label:"Islands", labelPl:"Wyspy UV", items:[
+      { keys:["Ctrl","A"], combo:true, action:"Average islands scale", actionPl:"Wyrównaj skalę wysp", hint:"even texel density", hintPl:"równa gęstość tekseli", doc:"modeling/meshes/uv/editing.html" },
+      { keys:["Ctrl","P"], combo:true, action:"Pack islands", actionPl:"Spakuj wyspy", hint:"set Margin for bake resolution", hintPl:"ustaw Margin pod rozdzielczość bake'u", doc:"modeling/meshes/uv/editing.html" },
+      { keys:["Ctrl","V"], combo:true, action:"Minimize stretch", actionPl:"Zminimalizuj rozciągnięcie", hint:"pin (P) what must stay", hintPl:"przypnij (P) to, co ma zostać", doc:"modeling/meshes/uv/editing.html" },
     ]},
   ]},
   { cat:"Shader Nodes", catPl:"Edytor węzłów", emoji:"🎨", groups:[

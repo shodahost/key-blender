@@ -74,7 +74,7 @@ The script downloads `blender_default.py` (the keymap generator) and `_rna_manua
 - each shortcut's keys trigger the declared operator in the declared keymap,
 - each manual link points to a page that exists in that Blender version.
 
-It exits non-zero on any mismatch, and CI runs it on every push (`.github/workflows/verify.yml`). To move to a new Blender release:
+It exits non-zero on any mismatch. Run it locally after editing `data.js`. To move to a new Blender release:
 
 1. Run the script with `--version X.Y`.
 2. Fix whatever it reports.

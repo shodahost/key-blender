@@ -1,0 +1,20 @@
+name: Verify shortcuts
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"   # weekly: catch keymap changes in Blender's release branch
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check data.js against Blender's default keymap and manual
+        run: python3 tools/verify_keymap.py
+      - name: Check app.js syntax
+        run: node --check assets/app.js && node --check assets/data.js

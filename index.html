@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blender Shortcuts — Cheat Sheet</title>
-<meta name="description" content="The most useful Blender keyboard shortcuts in a clean, modern layout. Object mode, Edit mode, Mesh cleanup, Sculpt mode, Texture paint, UV, Animation, Navigation and more.">
+<meta name="description" content="The most useful Blender keyboard shortcuts in a clean, modern layout. Object mode, Edit mode, Mesh cleanup, Sculpt mode, Texture paint, Grease Pencil, UV, Animation, Navigation and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
@@ -377,8 +377,8 @@ const DATA = [
       { keys:["Ctrl","L"], combo:true, action:"Link / transfer data menu", actionPl:"Menu łączenia / przenoszenia danych", doc:"scene_layout/object/editing/link_transfer/index.html" },
     ]},
     { label:"Parent & Apply", labelPl:"Rodzic i zastosuj", items:[
-      { keys:["Ctrl","P"], combo:true, action:"Parent to object", actionPl:"Przypisz rodzica", doc:"scene_layout/object/editing/parent.html" },
-      { keys:["Alt","P"], combo:true, action:"Clear parent", actionPl:"Usuń rodzica", doc:"scene_layout/object/editing/parent.html" },
+      { keys:["Ctrl","P"], combo:true, action:"Parent to object", actionPl:"Przypisz rodzica", hint:"parent = selected last (active) · Object (Keep Transform) avoids a jump", hintPl:"rodzic = zaznaczony ostatni (aktywny) · Object (Keep Transform) bez skoku", doc:"scene_layout/object/editing/parent.html" },
+      { keys:["Alt","P"], combo:true, action:"Clear parent", actionPl:"Usuń rodzica", hint:"Clear and Keep Transformation stays in place", hintPl:"Clear and Keep Transformation zostawia na miejscu", doc:"scene_layout/object/editing/parent.html" },
       { keys:["Ctrl","A"], combo:true, action:"Apply transform menu", actionPl:"Zastosuj transformacje (menu)", doc:"scene_layout/object/editing/apply.html" },
       { keys:["Ctrl","Shift","A"], combo:true, action:"Apply visual transform / clear", actionPl:"Zastosuj transformację wizualną", doc:"scene_layout/object/editing/apply.html" },
     ]},
@@ -518,6 +518,37 @@ const DATA = [
     { label:"Save textures", labelPl:"Zapis tekstur", items:[
       { keys:["Alt","S"], combo:true, action:"Save image", actionPl:"Zapisz obraz", hint:"Image Editor · Ctrl+S saves only the .blend", hintPl:"Image Editor · Ctrl+S zapisuje tylko .blend", doc:"editors/image/editing.html" },
       { keys:["Shift","Alt","S"], combo:true, action:"Save image as…", actionPl:"Zapisz obraz jako…", doc:"editors/image/editing.html" },
+    ]},
+  ]},
+  { cat:"Grease Pencil", catPl:"Grease Pencil", emoji:"✏️", groups:[
+    { label:"Modes & camera", labelPl:"Tryby i kamera", items:[
+      { keys:["Ctrl","Tab"], combo:true, action:"Mode pie → Draw Mode", actionPl:"Pie menu trybów → Draw Mode", doc:"grease_pencil/modes/draw/introduction.html" },
+      { keys:["Tab"], action:"Toggle Edit Mode", actionPl:"Przełącz Edit Mode", hint:"from Draw Mode Tab goes to Edit and back", hintPl:"z Draw Mode Tab przechodzi do Edit i z powrotem", doc:"grease_pencil/modes/draw/introduction.html" },
+      { keys:["Numpad 0"], action:"Camera view — draw through the camera", actionPl:"Widok z kamery — rysuj przez kamerę", hint:"static camera: Stroke Placement ▸ Surface · parented: Origin", hintPl:"stała kamera: Stroke Placement ▸ Surface · podpięty: Origin", doc:"grease_pencil/modes/draw/stroke_placement.html" },
+    ]},
+    { label:"Drawing", labelPl:"Rysowanie", items:[
+      { keys:["Ctrl"], action:"Erase while drawing (hold)", actionPl:"Gumka podczas rysowania (przytrzymaj)", doc:"grease_pencil/modes/draw/brushes/draw.html" },
+      { keys:["Shift"], action:"Smooth while drawing (hold)", actionPl:"Wygładzanie podczas rysowania (przytrzymaj)", doc:"grease_pencil/modes/draw/brushes/draw.html" },
+      { keys:["B"], action:"Box erase", actionPl:"Gumka prostokątem", doc:"grease_pencil/modes/draw/editing.html" },
+      { keys:["F"], action:"Change brush size", actionPl:"Zmień rozmiar pędzla", hint:"Shift+F = strength", hintPl:"Shift+F = siła", doc:"grease_pencil/modes/draw/brushes/draw.html" },
+      { keys:["X"], action:"Swap primary / secondary color", actionPl:"Zamień kolor główny / dodatkowy", hint:"Shift+X samples a color", hintPl:"Shift+X pobiera kolor", doc:"grease_pencil/modes/draw/tool_settings/color.html" },
+      { keys:["Shift","Space"], combo:true, action:"Brush asset popup", actionPl:"Wybór pędzla (asset shelf)", doc:"grease_pencil/modes/draw/brushes/draw.html" },
+    ]},
+    { label:"Frame by frame", labelPl:"Klatka po klatce", items:[
+      { keys:["Shift","I"], combo:true, action:"Insert blank keyframe", actionPl:"Wstaw pustą klatkę kluczową", hint:"active layer · always empty, even with Additive Drawing", hintPl:"aktywna warstwa · zawsze pusta, nawet z Additive Drawing", doc:"grease_pencil/animation/tools.html" },
+      { keys:["I"], action:"Keyframe menu", actionPl:"Menu klatek kluczowych", hint:"Duplicate Active Keyframe = copy of previous drawing", hintPl:"Duplicate Active Keyframe = kopia poprzedniego rysunku", doc:"grease_pencil/animation/tools.html" },
+      { keys:["Alt","I"], combo:true, action:"Delete keyframes menu", actionPl:"Menu usuwania klatek", doc:"grease_pencil/animation/tools.html" },
+      { keys:["Ctrl","E"], combo:true, action:"Interpolate between keyframes", actionPl:"Interpoluj między klatkami", hint:"Ctrl+Shift+E = whole sequence", hintPl:"Ctrl+Shift+E = cała sekwencja", doc:"grease_pencil/animation/tools.html" },
+    ]},
+    { label:"Layers", labelPl:"Warstwy", items:[
+      { keys:["Y"], action:"Set active layer", actionPl:"Wybierz aktywną warstwę", hint:"one layer per element, e.g. Flower", hintPl:"jedna warstwa na element, np. Flower", doc:"grease_pencil/properties/layers.html" },
+      { keys:["Numpad *"], action:"Isolate active layer", actionPl:"Izoluj aktywną warstwę", doc:"editors/dope_sheet/modes/grease_pencil.html" },
+      { keys:["Ctrl","Shift","M"], combo:true, action:"Merge layer down", actionPl:"Scal warstwę w dół", doc:"grease_pencil/properties/layers.html" },
+      { keys:["U"], action:"Set active material", actionPl:"Wybierz aktywny materiał", doc:"grease_pencil/materials/properties.html" },
+    ]},
+    { label:"Stick to camera", labelPl:"Przyklejenie do kamery", items:[
+      { keys:["Ctrl","P"], combo:true, action:"Parent to camera — Object (Keep Transform)", actionPl:"Podepnij do kamery — Object (Keep Transform)", hint:"select GP, then Shift-click the camera last", hintPl:"zaznacz GP, potem Shift-klik na kamerę jako ostatnią", doc:"scene_layout/object/editing/parent.html" },
+      { keys:["Alt","P"], combo:true, action:"Unparent — Clear and Keep Transformation", actionPl:"Odepnij — Clear and Keep Transformation", hint:"drawing stays where it is in the world", hintPl:"rysunek zostaje w miejscu w świecie", doc:"scene_layout/object/editing/parent.html" },
     ]},
   ]},
   { cat:"Selection", catPl:"Zaznaczanie", emoji:"🎯", groups:[

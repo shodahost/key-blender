@@ -3,771 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blender Shortcuts — Cheat Sheet</title>
-<meta name="description" content="The most useful Blender keyboard shortcuts in a clean, modern layout. Object mode, Edit mode, Mesh cleanup, Sculpt mode, Texture paint, Grease Pencil, UV, Animation, Navigation and more.">
+<title>Blender 5.2 Shortcuts — Cheat Sheet</title>
+<meta name="description" content="Interactive Blender 5.2 LTS keyboard shortcut cheat sheet for learners: every shortcut verified against Blender's default keymap, grouped by mode, with levels, pro tips, flashcards and progress tracking. English + Polish.">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0c0a08">
+<script>
+  // Apply saved view settings before first paint (no flash).
+  try {
+    var s = JSON.parse(localStorage.getItem('kb.settings') || '{}'), d = document.documentElement;
+    if (s.theme === 'light' || s.theme === 'dark') d.setAttribute('data-theme', s.theme);
+    if (s.density === 'compact') d.classList.add('compact');
+    if (localStorage.getItem('heroMin') === '1') d.classList.add('hero-min');
+  } catch (e) {}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg: #0c0a08;
-    --bg-soft: #16130f;
-    --card: #1b1712;
-    --card-2: #221c15;
-    --border: #36302a;
-    --border-soft: #2a241e;
-    --text: #f6f1ea;
-    --muted: #b6a996;
-    --faint: #857a6c;
-    --accent: #ec7a25;
-    --accent-2: #ffb347;
-    --accent-3: #4f9cff;
-    --key-bg: #2c2620;
-    --key-top: #38312a;
-    --key-text: #fbeede;
-    --shadow: 0 10px 30px rgba(0,0,0,.5);
-    --radius: 18px;
-  }
-  [data-theme="light"]{
-    --bg:#f7f4ef; --bg-soft:#ffffff; --card:#ffffff; --card-2:#faf6f0;
-    --border:#ece4d8; --border-soft:#f1ebe1; --text:#1b1712; --muted:#6a5f50;
-    --faint:#9a8d7a; --key-bg:#f3ede3; --key-top:#ffffff; --key-text:#2a2218;
-    --shadow:0 12px 30px rgba(90,60,20,.12);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-    background:var(--bg); color:var(--text); line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-    background-image:
-      radial-gradient(900px 500px at 12% -8%, rgba(236,122,37,.13), transparent 60%),
-      radial-gradient(800px 500px at 95% 0%, rgba(79,156,255,.10), transparent 55%);
-    background-attachment:fixed;
-    transition:background-color .3s,color .3s;
-  }
-  .wrap{max-width:1100px;margin:0 auto;padding: 22px}
-
-  /* Polish translation styling */
-  .pl{display:block;color:var(--faint);font-weight:400;font-style:italic;}
-
-  /* HEADER */
-  header{padding:64px 0 26px;text-align:center;position:relative}
-  .badge{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
-    color:var(--accent);background:color-mix(in srgb, var(--accent) 14%, transparent);
-    border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-    padding:6px 14px;border-radius:100px;margin-bottom:22px;
-  }
-  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
-  h1{
-    font-size:clamp(2.1rem,6vw,3.7rem);font-weight:900;line-height:1.05;letter-spacing:-.02em;
-    background:linear-gradient(135deg,var(--text) 30%, var(--accent) 130%);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .subtitle{color:var(--muted);font-size:clamp(1rem,2.2vw,1.18rem);margin:18px auto 0;max-width:640px}
-  .subtitle .pl{font-size:.92em;margin-top:6px}
-
-  /* SEARCH + CONTROLS */
-  .controls{
-    position:sticky;top:0;z-index:50;padding:16px 0;margin-top:34px;
-    background:color-mix(in srgb, var(--bg) 80%, transparent);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-    border-bottom:1px solid transparent;transition:border-color .25s;
-  }
-  .controls.stuck{border-color:var(--border)}
-  .controls-inner{display:flex;gap:12px;align-items:center}
-  .search{position:relative;flex:1}
-  .search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--faint)}
-  .search input{
-    width:100%;padding:14px 16px 14px 46px;font-size:1rem;font-family:inherit;
-    background:var(--card);border:1px solid var(--border);border-radius:14px;color:var(--text);
-    outline:none;transition:border-color .2s,box-shadow .2s;
-  }
-  .search input:focus{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
-  .search input::placeholder{color:var(--faint)}
-  .icon-btn{
-    flex:none;width:50px;height:50px;display:grid;place-items:center;cursor:pointer;
-    background:var(--card);border:1px solid var(--border);border-radius:14px;color:var(--text);
-    transition:transform .15s,border-color .2s,background .2s;
-  }
-  .icon-btn:hover{border-color:var(--accent);transform:translateY(-2px)}
-  .icon-btn svg{width:20px;height:20px}
-
-  /* CHIPS */
-  .chips{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:22px 0 8px}
-  .chip{
-    font-size:.86rem;font-weight:600;cursor:pointer;user-select:none;
-    padding:8px 15px;border-radius:100px;border:1px solid var(--border);
-    background:var(--card);color:var(--muted);transition:all .18s;
-    display:inline-flex;align-items:center;gap:7px;
-  }
-  .chip:hover{color:var(--text);border-color:var(--faint);transform:translateY(-1px)}
-  .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
-  .chip .emoji{font-size:1rem}
-
-  /* HERO */
-  .jkl{
-    margin:42px 0;padding:30px;border-radius:var(--radius);
-    background:linear-gradient(135deg,var(--card),var(--card-2));
-    border:1px solid var(--border);box-shadow:var(--shadow);
-  }
-  .jkl h2{font-size:1.35rem;font-weight:800;display:flex;align-items:center;gap:10px}
-  .jkl h2 .pl{display:inline;font-size:.7em}
-  .jkl p{color:var(--muted);margin:10px 0 6px;max-width:680px}
-  .jkl p.pl{margin:0 0 24px;max-width:680px}
-  .jkl-keys{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-  .bigkey{
-    flex:1;min-width:150px;max-width:240px;text-align:center;padding:22px 16px;border-radius:16px;
-    background:var(--bg-soft);border:1px solid var(--border);transition:transform .2s,border-color .2s;
-  }
-  .bigkey:hover{transform:translateY(-4px);border-color:var(--accent)}
-  .bigkey .cap{
-    display:inline-grid;place-items:center;width:62px;height:62px;margin-bottom:14px;
-    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.8rem;color:var(--key-text);
-    background:linear-gradient(180deg,var(--key-top),var(--key-bg));
-    border-radius:14px;border:1px solid var(--border);
-    box-shadow:0 4px 0 var(--border),0 6px 12px rgba(0,0,0,.25);
-  }
-  .bigkey strong{display:block;font-size:1.02rem;margin-bottom:4px}
-  .bigkey span.en{color:var(--muted);font-size:.88rem;display:block}
-  .bigkey span.pl{font-size:.82rem;margin-top:2px}
-
-  /* CATEGORY SECTIONS */
-  .cat{margin:36px 0;scroll-margin-top:90px}
-  .cat-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-  .cat-head .emoji{
-    font-size:1.4rem;width:48px;height:48px;display:grid;place-items:center;border-radius:13px;
-    background:var(--card);border:1px solid var(--border);flex:none;
-  }
-  .cat-head h2{font-size:1.4rem;font-weight:800;letter-spacing:-.01em;line-height:1.15}
-  .cat-head h2 .pl{font-size:.62em;font-weight:500}
-  .cat-head .count{margin-left:auto;font-size:.82rem;color:var(--faint);font-weight:600;text-align:right}
-
-  /* SUBGROUPS (tags) */
-  .subgroup{margin-top:20px}
-  .subgroup:first-child{margin-top:6px}
-  .sub-tag{
-    display:inline-flex;align-items:center;gap:7px;margin-bottom:11px;
-    font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
-    color:var(--accent-2);background:color-mix(in srgb,var(--accent) 13%,transparent);
-    border:1px solid color-mix(in srgb,var(--accent) 28%,transparent);
-    padding:5px 13px;border-radius:9px;
-  }
-  .sub-tag .pl{display:inline;color:var(--faint);font-weight:500;text-transform:none;letter-spacing:0;font-style:italic}
-  .sub-tag::before{content:"#";color:var(--accent);font-weight:800;opacity:.7}
-
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:12px}
-  .row{
-    display:flex;align-items:center;gap:16px;padding:15px 18px;border-radius:14px;
-    background:var(--card);border:1px solid var(--border-soft);transition:border-color .18s,transform .12s,background .18s;
-  }
-  a.row{text-decoration:none;color:inherit}
-  .row:hover{border-color:var(--accent);transform:translateY(-2px)}
-  .doc-ico{
-    width:15px;height:15px;flex:none;margin-left:auto;color:var(--faint);
-    opacity:0;transform:translateY(1px);transition:opacity .18s,color .18s;
-  }
-  a.row:hover .doc-ico{opacity:1;color:var(--accent)}
-  @media (hover:none){ .doc-ico{opacity:.5} }
-  .keys{flex:none;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-  kbd{
-    font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600;color:var(--key-text);
-    background:linear-gradient(180deg,var(--key-top),var(--key-bg));
-    padding:5px 9px;border-radius:7px;border:1px solid var(--border);
-    box-shadow:0 2px 0 var(--border);white-space:nowrap;line-height:1;
-  }
-  .keys .plus{color:var(--faint);font-size:.78rem;font-weight:700}
-  .keys .slash{color:var(--faint);font-size:.85rem;font-weight:700;margin:0 1px}
-  .action{color:var(--text);font-size:.94rem}
-  .action .pl{font-size:.82rem;margin-top:2px}
-  .action .hint{display:block;color:var(--faint);font-size:.8rem;margin-top:3px;font-style:normal}
-  .action .hint .pl{display:inline;font-size:1em;font-style:italic}
-
-  .no-results{text-align:center;padding:60px 20px;color:var(--muted);display:none}
-  .no-results.show{display:block}
-  .no-results .big{font-size:2.4rem;margin-bottom:8px}
-
-  /* TOP5 */
-  .top5{
-    margin:46px 0;padding:32px;border-radius:var(--radius);
-    background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 12%,var(--card)),var(--card));
-    border:1px solid color-mix(in srgb,var(--accent) 25%,var(--border));
-  }
-  .top5 h2{font-size:1.5rem;font-weight:800;margin-bottom:6px}
-  .top5 .lead{color:var(--muted);margin-bottom:22px}
-  .top5 .lead .pl{font-size:.92em}
-  .top5 ol{list-style:none;counter-reset:t;display:grid;gap:11px}
-  .top5 li{
-    counter-increment:t;display:flex;align-items:center;gap:16px;
-    padding:14px 18px;background:var(--bg-soft);border:1px solid var(--border-soft);border-radius:13px;
-  }
-  .top5 li::before{
-    content:counter(t);flex:none;width:34px;height:34px;display:grid;place-items:center;
-    font-weight:800;font-size:1rem;color:#fff;border-radius:10px;
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));
-  }
-  .top5 li .t-keys{flex:none}
-  .top5 li .t-desc{color:var(--muted);font-size:.92rem}
-  .top5 li .t-desc b{color:var(--text)}
-  .top5 li .t-desc .pl{font-size:.88em}
-
-  footer{text-align:center;padding:48px 0 60px;color:var(--faint);font-size:.88rem;border-top:1px solid var(--border-soft);margin-top:40px}
-  footer a{color:var(--accent);text-decoration:none;font-weight:600}
-  footer a:hover{text-decoration:underline}
-
-  .note{
-    font-size:.78rem;color:var(--faint);background:var(--card);border:1px solid var(--border-soft);
-    border-radius:10px;padding:10px 14px;display:inline-block;margin-top:14px;
-  }
-  .note .pl{display:block;margin-top:4px}
-
-  @media (max-width:640px){
-    header{padding:44px 0 18px}
-    .grid{grid-template-columns:1fr}
-    .jkl,.top5{padding:22px}
-    .controls-inner{flex-wrap:nowrap}
-  }
-  ::selection{background:var(--accent);color:#fff}
-</style>
+<link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 
-<header class="wrap">
-  <div class="badge"><span class="dot"></span>Blender · Cheat Sheet</div>
-  <h1>Blender<br>Keyboard Shortcuts</h1>
-  <p class="subtitle">The most useful shortcuts grouped by mode. Search, filter and model faster — keep one hand on the keyboard.
-    <span class="pl">Najprzydatniejsze skróty pogrupowane według trybu. Wyszukuj, filtruj i twórz szybciej — trzymaj rękę na klawiaturze.</span>
-  </p>
-</header>
+<a class="skip" href="#sections">Skip to shortcuts</a>
 
-<div class="controls" id="controls">
-  <div class="wrap controls-inner">
-    <div class="search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="search" placeholder="Search a shortcut or action…  /  Szukaj skrótu lub akcji…" autocomplete="off">
-    </div>
-    <button class="icon-btn" id="theme" title="Toggle theme" aria-label="Toggle theme">
-      <svg id="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+<header class="wrap" id="top">
+  <div class="badge-row">
+    <div class="badge"><span class="dot"></span><span id="badgeText">Blender 5.2 LTS · Cheat Sheet</span></div>
+    <button class="min-btn" id="minBtn" type="button" aria-controls="heroText" aria-expanded="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path class="v" d="M12 5v14"/></svg>
     </button>
   </div>
+  <div class="collapsible" id="heroText"><div>
+    <h1 id="title">Blender<br>Keyboard Shortcuts</h1>
+    <p class="subtitle" id="subtitle"></p>
+    <div class="stats" id="stats"></div>
+  </div></div>
+</header>
+
+<div class="toolbar" id="toolbar">
+  <div class="wrap">
+    <div class="tb-row">
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="search" autocomplete="off" spellcheck="false">
+        <kbd class="search-hint" aria-hidden="true">/</kbd>
+      </label>
+      <div class="seg" id="levels" role="radiogroup"></div>
+      <button class="icon-btn" id="quizBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="14" height="16" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v14"/><path d="M8 11.5a2 2 0 1 1 3 1.7c-.6.4-1 .8-1 1.5M10 17.5h.01"/></svg>
+        <span class="btn-label" id="quizLabel">Quiz</span>
+      </button>
+      <button class="icon-btn" id="themeBtn" type="button"></button>
+      <button class="icon-btn" id="settingsBtn" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+      </button>
+    </div>
+    <nav class="chips" id="chips" aria-label="Categories"></nav>
+  </div>
+  <div class="settings" id="settings" role="dialog" aria-modal="false" hidden></div>
 </div>
 
 <main class="wrap">
-
-  <div class="chips" id="chips"></div>
-
-  <!-- HERO: G R S -->
-  <section class="jkl" data-cat="General">
-    <h2>🛠 The core of Blender: G / R / S</h2>
-    <p>Grab, Rotate, Scale — the transform trio you'll use thousands of times. After pressing one, tap <kbd>X</kbd>, <kbd>Y</kbd> or <kbd>Z</kbd> to constrain to an axis, type a number for exact values, then click or press <kbd>Enter</kbd>.</p>
-    <p class="pl">Przesuń, Obróć, Skaluj — trio transformacji, którego użyjesz tysiące razy. Po naciśnięciu jednego wciśnij <kbd>X</kbd>, <kbd>Y</kbd> lub <kbd>Z</kbd>, aby ograniczyć do osi, wpisz liczbę dla dokładnej wartości i zatwierdź <kbd>Enter</kbd>.</p>
-    <div class="jkl-keys">
-      <div class="bigkey"><div class="cap">G</div><strong>Grab / Move</strong><span class="en">move selection</span><span class="en pl">przesuń zaznaczenie</span></div>
-      <div class="bigkey"><div class="cap">R</div><strong>Rotate</strong><span class="en">press twice = trackball</span><span class="en pl">dwukrotnie = trackball</span></div>
-      <div class="bigkey"><div class="cap">S</div><strong>Scale</strong><span class="en">resize selection</span><span class="en pl">skaluj zaznaczenie</span></div>
-    </div>
-  </section>
-
+  <section class="start" id="start" hidden></section>
+  <div class="search-info" id="searchInfo" hidden></div>
   <div id="sections"></div>
-
-  <div class="no-results" id="noResults">
-    <div class="big">🔍</div>
-    <strong>No results</strong>
-    <p>No shortcut matches your query.<span class="pl">Nie znaleziono skrótu pasującego do zapytania.</span></p>
-  </div>
-
-  <!-- TOP 5 -->
-  <section class="top5">
-    <h2>🏆 Top 5 to learn first</h2>
-    <p class="lead">If you only learn five things — make it these.<span class="pl">Jeśli masz nauczyć się tylko pięciu rzeczy — niech to będą te.</span></p>
-    <ol>
-      <li><span class="t-keys keys"><kbd>G</kbd><kbd>R</kbd><kbd>S</kbd></span><span class="t-desc"><b>Transform</b> — grab, rotate, scale<span class="pl">Transformacja — przesuń, obróć, skaluj</span></span></li>
-      <li><span class="t-keys keys"><kbd>Tab</kbd></span><span class="t-desc"><b>Toggle Edit / Object</b> mode<span class="pl">Przełącz tryb Edit / Object</span></span></li>
-      <li><span class="t-keys keys"><kbd>X</kbd></span><span class="t-desc"><b>Delete</b> with type menu<span class="pl">Usuń z menu wyboru typu</span></span></li>
-      <li><span class="t-keys keys"><kbd>Shift</kbd><span class="plus">+</span><kbd>A</kbd></span><span class="t-desc"><b>Add</b> object / mesh / etc.<span class="pl">Dodaj obiekt / siatkę / itp.</span></span></li>
-      <li><span class="t-keys keys"><kbd>Z</kbd></span><span class="t-desc"><b>Shading pie</b> — wireframe, solid, render<span class="pl">Pie cieniowania — wireframe, solid, render</span></span></li>
-    </ol>
-  </section>
-
+  <div class="empty" id="empty" hidden></div>
+  <section class="setup" id="setup" hidden></section>
+  <noscript><p class="empty">This cheat sheet needs JavaScript. · Ta ściąga wymaga JavaScriptu.</p></noscript>
 </main>
 
-<footer class="wrap">
-  <p>Blender shortcut cheat sheet · <span id="total"></span> shortcuts</p>
-  <p class="note">💡 Shortcuts assume Blender's default keymap (industry-compatible keymap differs). Some keys are context-sensitive and depend on where your mouse hovers.
-    <span class="pl">Skróty zakładają domyślny keymap Blendera (keymap zgodny z innymi programami różni się). Część klawiszy zależy od kontekstu i pozycji kursora.</span>
-  </p>
-</footer>
+<footer class="wrap" id="footer"></footer>
 
-<script>
-const DOCS = "https://docs.blender.org/manual/en/latest/";
-const DATA = [
-  { cat:"General", catPl:"Ogólne", emoji:"🛠", groups:[
-    { label:"Files", labelPl:"Pliki", items:[
-      { keys:["Ctrl","N"], combo:true, action:"New file", actionPl:"Nowy plik", doc:"files/blend/open_save.html" },
-      { keys:["Ctrl","O"], combo:true, action:"Open file", actionPl:"Otwórz plik", doc:"files/blend/open_save.html" },
-      { keys:["Ctrl","S"], combo:true, action:"Save file", actionPl:"Zapisz plik", doc:"files/blend/open_save.html" },
-      { keys:["Ctrl","Shift","S"], combo:true, action:"Save as…", actionPl:"Zapisz jako…", doc:"files/blend/open_save.html" },
-      { keys:["Ctrl","Q"], combo:true, action:"Quit Blender", actionPl:"Zamknij Blender", doc:"files/blend/open_save.html" },
-      { keys:["F4"], action:"File / system menu", actionPl:"Menu pliku / systemu", doc:"interface/window_system/topbar.html" },
-    ]},
-    { label:"Undo & Repeat", labelPl:"Cofanie i powtórki", items:[
-      { keys:["Ctrl","Z"], combo:true, action:"Undo", actionPl:"Cofnij", doc:"interface/undo_redo.html" },
-      { keys:["Ctrl","Shift","Z"], combo:true, action:"Redo", actionPl:"Ponów", doc:"interface/undo_redo.html" },
-      { keys:["Shift","R"], combo:true, action:"Repeat last action", actionPl:"Powtórz ostatnią akcję", doc:"interface/undo_redo.html" },
-      { keys:["Ctrl","Alt","Z"], combo:true, action:"Undo history", actionPl:"Historia cofania", doc:"interface/undo_redo.html" },
-    ]},
-    { label:"Add & Delete", labelPl:"Dodawanie i usuwanie", items:[
-      { keys:["Shift","A"], combo:true, action:"Add object / mesh / light…", actionPl:"Dodaj obiekt / siatkę / światło…", doc:"modeling/meshes/primitives.html" },
-      { keys:["X"], action:"Delete (with menu)", actionPl:"Usuń (z menu)", doc:"scene_layout/object/editing/delete.html" },
-      { keys:["Tab"], action:"Toggle Edit / Object mode", actionPl:"Przełącz tryb Edit / Object", doc:"editors/3dview/modes.html" },
-      { keys:["Ctrl","Tab"], combo:true, action:"Mode pie menu", actionPl:"Pie menu trybów", doc:"editors/3dview/modes.html" },
-    ]},
-    { label:"Search & Operators", labelPl:"Wyszukiwanie i operatory", items:[
-      { keys:["F2"], action:"Rename active item", actionPl:"Zmień nazwę aktywnego elementu", doc:"interface/controls/buttons/fields.html" },
-      { keys:["F3"], action:"Search menu / operators", actionPl:"Wyszukaj polecenie / operator", doc:"interface/controls/buttons/menus.html" },
-      { keys:["F9"], action:"Adjust last operation", actionPl:"Dostosuj ostatnią operację", doc:"interface/operators.html" },
-      { keys:["F12"], action:"Render image", actionPl:"Renderuj obraz", doc:"render/introduction.html" },
-      { keys:["Ctrl","F12"], combo:true, action:"Render animation", actionPl:"Renderuj animację", doc:"render/output/animation.html" },
-    ]},
-    { label:"Workspace", labelPl:"Przestrzeń robocza", items:[
-      { keys:["Ctrl","Space"], combo:true, action:"Maximize / restore area", actionPl:"Maksymalizuj / przywróć obszar", doc:"interface/window_system/areas.html" },
-      { keys:["Ctrl","PageUp"], combo:true, action:"Next workspace tab", actionPl:"Następna zakładka workspace", doc:"interface/window_system/workspaces.html" },
-      { keys:["Ctrl","PageDown"], combo:true, action:"Previous workspace tab", actionPl:"Poprzednia zakładka workspace", doc:"interface/window_system/workspaces.html" },
-      { keys:["T"], action:"Toggle toolbar", actionPl:"Przełącz pasek narzędzi", doc:"interface/window_system/regions.html" },
-      { keys:["N"], action:"Toggle side panel", actionPl:"Przełącz panel boczny", doc:"interface/window_system/regions.html" },
-    ]},
-  ]},
-  { cat:"Transform", catPl:"Transformacje", emoji:"🔧", groups:[
-    { label:"Core", labelPl:"Podstawowe", items:[
-      { keys:["G"], action:"Grab / move", actionPl:"Przesuń", doc:"scene_layout/object/editing/transform/move.html" },
-      { keys:["R"], action:"Rotate", actionPl:"Obróć", hint:"press twice for trackball", hintPl:"dwukrotnie = trackball", doc:"scene_layout/object/editing/transform/rotate.html" },
-      { keys:["S"], action:"Scale", actionPl:"Skaluj", doc:"scene_layout/object/editing/transform/scale.html" },
-      { keys:["Alt","G"], combo:true, action:"Clear location", actionPl:"Wyzeruj pozycję", doc:"scene_layout/object/editing/clear.html" },
-      { keys:["Alt","R"], combo:true, action:"Clear rotation", actionPl:"Wyzeruj obrót", doc:"scene_layout/object/editing/clear.html" },
-      { keys:["Alt","S"], combo:true, action:"Clear scale", actionPl:"Wyzeruj skalę", doc:"scene_layout/object/editing/clear.html" },
-    ]},
-    { label:"Axis constraints", labelPl:"Ograniczenie do osi", items:[
-      { keys:["X"], action:"Lock to X axis", actionPl:"Zablokuj do osi X", hint:"after G/R/S", hintPl:"po G/R/S", doc:"scene_layout/object/editing/transform/control/axis_locking.html" },
-      { keys:["Y"], action:"Lock to Y axis", actionPl:"Zablokuj do osi Y", doc:"scene_layout/object/editing/transform/control/axis_locking.html" },
-      { keys:["Z"], action:"Lock to Z axis", actionPl:"Zablokuj do osi Z", doc:"scene_layout/object/editing/transform/control/axis_locking.html" },
-      { keys:["Shift","Z"], combo:true, action:"Exclude Z (move in XY)", actionPl:"Wyklucz Z (ruch w XY)", doc:"scene_layout/object/editing/transform/control/axis_locking.html" },
-      { keys:["X","X"], action:"Lock to local X", actionPl:"Zablokuj do lokalnej osi X", hint:"press X twice", hintPl:"naciśnij X dwa razy", doc:"scene_layout/object/editing/transform/control/axis_locking.html" },
-    ]},
-    { label:"Precision", labelPl:"Precyzja", items:[
-      { keys:["Ctrl"], action:"Snap while dragging (hold)", actionPl:"Przyciąganie podczas ruchu (przytrzymaj)", doc:"editors/3dview/controls/snapping.html" },
-      { keys:["Shift"], action:"Slow / precise (hold)", actionPl:"Wolno / precyzyjnie (przytrzymaj)", doc:"scene_layout/object/editing/transform/control/index.html" },
-      { keys:["5"], action:"Type exact value", actionPl:"Wpisz dokładną wartość", hint:"e.g. G Z 2 Enter", hintPl:"np. G Z 2 Enter", doc:"scene_layout/object/editing/transform/control/index.html" },
-      { keys:["Enter"], action:"Confirm transform", actionPl:"Zatwierdź transformację", doc:"scene_layout/object/editing/transform/control/index.html" },
-      { keys:["Esc"], action:"Cancel transform", actionPl:"Anuluj transformację", doc:"scene_layout/object/editing/transform/control/index.html" },
-    ]},
-    { label:"Pivot & Snap", labelPl:"Punkt obrotu i snap", items:[
-      { keys:[","], action:"Pivot point pie menu", actionPl:"Pie menu punktu obrotu", doc:"editors/3dview/controls/pivot_point/index.html" },
-      { keys:["."], action:"Transform orientation pie", actionPl:"Pie menu orientacji", doc:"editors/3dview/controls/orientation.html" },
-      { keys:["Shift","S"], combo:true, action:"Snap pie menu", actionPl:"Pie menu przyciągania", doc:"editors/3dview/controls/snapping.html" },
-      { keys:["Shift","Tab"], combo:true, action:"Toggle snapping", actionPl:"Przełącz przyciąganie", doc:"editors/3dview/controls/snapping.html" },
-    ]},
-  ]},
-  { cat:"Object Mode", catPl:"Tryb Object", emoji:"📦", groups:[
-    { label:"Duplicate & Link", labelPl:"Duplikaty i powiązania", items:[
-      { keys:["Shift","D"], combo:true, action:"Duplicate", actionPl:"Duplikuj", doc:"scene_layout/object/editing/duplicate.html" },
-      { keys:["Alt","D"], combo:true, action:"Linked duplicate", actionPl:"Duplikat połączony", doc:"scene_layout/object/editing/duplicate_linked.html" },
-      { keys:["Ctrl","J"], combo:true, action:"Join objects", actionPl:"Połącz obiekty", doc:"scene_layout/object/editing/join.html" },
-      { keys:["Ctrl","L"], combo:true, action:"Link / transfer data menu", actionPl:"Menu łączenia / przenoszenia danych", doc:"scene_layout/object/editing/link_transfer/index.html" },
-    ]},
-    { label:"Parent & Apply", labelPl:"Rodzic i zastosuj", items:[
-      { keys:["Ctrl","P"], combo:true, action:"Parent to object", actionPl:"Przypisz rodzica", hint:"parent = selected last (active) · Object (Keep Transform) avoids a jump", hintPl:"rodzic = zaznaczony ostatni (aktywny) · Object (Keep Transform) bez skoku", doc:"scene_layout/object/editing/parent.html" },
-      { keys:["Alt","P"], combo:true, action:"Clear parent", actionPl:"Usuń rodzica", hint:"Clear and Keep Transformation stays in place", hintPl:"Clear and Keep Transformation zostawia na miejscu", doc:"scene_layout/object/editing/parent.html" },
-      { keys:["Ctrl","A"], combo:true, action:"Apply transform menu", actionPl:"Zastosuj transformacje (menu)", doc:"scene_layout/object/editing/apply.html" },
-      { keys:["Ctrl","Shift","A"], combo:true, action:"Apply visual transform / clear", actionPl:"Zastosuj transformację wizualną", doc:"scene_layout/object/editing/apply.html" },
-    ]},
-    { label:"Organize", labelPl:"Organizacja", items:[
-      { keys:["M"], action:"Move to collection", actionPl:"Przenieś do kolekcji", doc:"scene_layout/collections/collections.html" },
-      { keys:["G"], action:"Move object", actionPl:"Przesuń obiekt", hint:"then X/Y/Z to lock axis", hintPl:"potem X/Y/Z by zablokować oś", doc:"scene_layout/object/editing/transform/move.html" },
-      { keys:["H"], action:"Hide selected", actionPl:"Ukryj zaznaczone", doc:"scene_layout/object/editing/show_hide.html" },
-      { keys:["Shift","H"], combo:true, action:"Hide unselected", actionPl:"Ukryj niezaznaczone", doc:"scene_layout/object/editing/show_hide.html" },
-      { keys:["Alt","H"], combo:true, action:"Unhide all", actionPl:"Odkryj wszystko", doc:"scene_layout/object/editing/show_hide.html" },
-    ]},
-    { label:"Display", labelPl:"Wyświetlanie", items:[
-      { keys:["Z"], action:"Shading pie menu", actionPl:"Pie menu cieniowania", doc:"editors/3dview/display/shading.html" },
-      { keys:["Shift","Z"], combo:true, action:"Toggle wireframe", actionPl:"Przełącz wireframe", doc:"editors/3dview/display/shading.html" },
-      { keys:["Alt","Z"], combo:true, action:"Toggle X-Ray", actionPl:"Przełącz X-Ray", hint:"box select grabs hidden geometry too", hintPl:"box select łapie też geometrię z tyłu", doc:"editors/3dview/introduction.html" },
-      { keys:["Numpad ."], action:"Frame selected object", actionPl:"Wykadruj zaznaczony obiekt", doc:"editors/3dview/navigate/navigation.html" },
-    ]},
-  ]},
-  { cat:"Edit Mode", catPl:"Tryb Edit", emoji:"🔺", groups:[
-    { label:"Select mode", labelPl:"Tryb zaznaczania", items:[
-      { keys:["1"], action:"Vertex select mode", actionPl:"Tryb zaznaczania wierzchołków", doc:"modeling/meshes/selecting/introduction.html" },
-      { keys:["2"], action:"Edge select mode", actionPl:"Tryb zaznaczania krawędzi", doc:"modeling/meshes/selecting/introduction.html" },
-      { keys:["3"], action:"Face select mode", actionPl:"Tryb zaznaczania ścian", doc:"modeling/meshes/selecting/introduction.html" },
-      { keys:["Shift","1"], combo:true, action:"Add select mode (combine)", actionPl:"Dołóż tryb zaznaczania (łącz)", hint:"also Shift+2 / Shift+3", hintPl:"także Shift+2 / Shift+3", doc:"modeling/meshes/selecting/introduction.html" },
-      { keys:["Alt","Click"], combo:true, action:"Select edge / face loop", actionPl:"Zaznacz pętlę krawędzi / ścian", doc:"modeling/meshes/selecting/loops.html" },
-      { keys:["Ctrl","Alt","Click"], combo:true, action:"Select ring", actionPl:"Zaznacz pierścień", doc:"modeling/meshes/selecting/loops.html" },
-      { keys:["Shift","G"], combo:true, action:"Select similar menu", actionPl:"Menu zaznaczania podobnych", hint:"by sides, length, material, angle…", hintPl:"wg boków, długości, materiału, kąta…", doc:"modeling/meshes/selecting/similar.html" },
-    ]},
-    { label:"Modeling tools", labelPl:"Narzędzia modelowania", items:[
-      { keys:["E"], action:"Extrude", actionPl:"Wytłocz", doc:"modeling/meshes/editing/mesh/extrude.html" },
-      { keys:["Alt","E"], combo:true, action:"Extrude menu", actionPl:"Menu wytłaczania", doc:"modeling/meshes/editing/mesh/extrude.html" },
-      { keys:["I"], action:"Inset faces", actionPl:"Wstaw (inset) ściany", doc:"modeling/meshes/editing/face/inset_faces.html" },
-      { keys:["Ctrl","B"], combo:true, action:"Bevel", actionPl:"Faza (bevel)", hint:"scroll adds segments", hintPl:"scroll dodaje segmenty", doc:"modeling/meshes/editing/edge/bevel.html" },
-      { keys:["Ctrl","Shift","B"], combo:true, action:"Bevel vertices", actionPl:"Faza na wierzchołkach", doc:"modeling/meshes/editing/edge/bevel.html" },
-      { keys:["Ctrl","R"], combo:true, action:"Loop cut", actionPl:"Cięcie pętlą (loop cut)", hint:"scroll = more cuts, RMB = keep centered", hintPl:"scroll = więcej cięć, PPM = zostaw na środku", doc:"modeling/meshes/editing/edge/loopcut_slide.html" },
-      { keys:["G","G"], action:"Edge / vertex slide", actionPl:"Przesuń wzdłuż powierzchni (slide)", hint:"press G twice", hintPl:"naciśnij G dwa razy", doc:"modeling/meshes/editing/edge/edge_slide.html" },
-      { keys:["Alt","S"], combo:true, action:"Shrink / fatten along normals", actionPl:"Zwęź / pogrub wzdłuż normalnych", doc:"modeling/meshes/editing/mesh/transform/shrink-fatten.html" },
-      { keys:["J"], action:"Connect vertex path", actionPl:"Połącz wierzchołki ścieżką", hint:"splits n-gons, reroutes loops", hintPl:"dzieli n-gony, przekierowuje loopy", doc:"modeling/meshes/editing/vertex/connect_vertex_path.html" },
-      { keys:["K"], action:"Knife tool", actionPl:"Narzędzie nóż", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
-      { keys:["F"], action:"Make edge / face", actionPl:"Utwórz krawędź / ścianę", doc:"modeling/meshes/editing/vertex/make_face_edge.html" },
-      { keys:["Ctrl","E"], combo:true, action:"Edge menu (seam, crease…)", actionPl:"Menu krawędzi (seam, crease…)", doc:"modeling/meshes/editing/edge/index.html" },
-      { keys:["Ctrl","F"], combo:true, action:"Face menu", actionPl:"Menu ścian", doc:"modeling/meshes/editing/face/index.html" },
-      { keys:["Ctrl","V"], combo:true, action:"Vertex menu", actionPl:"Menu wierzchołków", doc:"modeling/meshes/editing/vertex/index.html" },
-    ]},
-    { label:"Cleanup", labelPl:"Porządkowanie", items:[
-      { keys:["M"], action:"Merge menu", actionPl:"Menu scalania", hint:"M → By Distance removes doubles", hintPl:"M → By Distance usuwa zdublowane wierzchołki", doc:"modeling/meshes/editing/mesh/merge.html" },
-      { keys:["P"], action:"Separate selection", actionPl:"Oddziel zaznaczenie", doc:"modeling/meshes/editing/mesh/separate.html" },
-      { keys:["X"], action:"Delete menu", actionPl:"Menu usuwania", hint:"leaves a hole", hintPl:"zostawia dziurę", doc:"modeling/meshes/editing/mesh/delete.html" },
-      { keys:["Ctrl","X"], combo:true, action:"Dissolve", actionPl:"Rozpuść (dissolve)", hint:"keeps the surface closed", hintPl:"zachowuje ciągłość powierzchni", doc:"modeling/meshes/editing/mesh/delete.html" },
-      { keys:["Y"], action:"Split selection", actionPl:"Oderwij zaznaczenie (split)", doc:"modeling/meshes/editing/mesh/split.html" },
-      { keys:["Alt","M"], combo:true, action:"Split menu", actionPl:"Menu rozdzielania (split)", doc:"modeling/meshes/editing/mesh/split.html" },
-    ]},
-    { label:"Selection", labelPl:"Zaznaczanie", items:[
-      { keys:["L"], action:"Select linked under cursor", actionPl:"Zaznacz połączone pod kursorem", doc:"modeling/meshes/selecting/linked.html" },
-      { keys:["Ctrl","L"], combo:true, action:"Select linked", actionPl:"Zaznacz połączone", doc:"modeling/meshes/selecting/linked.html" },
-      { keys:["Ctrl","Numpad +"], combo:true, action:"Grow selection", actionPl:"Powiększ zaznaczenie", doc:"modeling/meshes/selecting/more_less.html" },
-      { keys:["Ctrl","Numpad -"], combo:true, action:"Shrink selection", actionPl:"Zmniejsz zaznaczenie", doc:"modeling/meshes/selecting/more_less.html" },
-    ]},
-    { label:"Knife (while cutting)", labelPl:"Nóż (w trakcie cięcia)", items:[
-      { keys:["C"], action:"Toggle cut through", actionPl:"Przełącz cięcie na wylot", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
-      { keys:["A"], action:"Toggle angle snapping", actionPl:"Przełącz przyciąganie kąta", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
-      { keys:["RMB"], action:"Start a new cut line", actionPl:"Zacznij nową linię cięcia", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
-      { keys:["Shift"], action:"Snap to edge midpoints (hold)", actionPl:"Przyciągaj do środków krawędzi (przytrzymaj)", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
-      { keys:["Enter"], action:"Confirm cut", actionPl:"Zatwierdź cięcie", hint:"or Space", hintPl:"lub Spacja", doc:"modeling/meshes/editing/mesh/knife_topology_tool.html" },
-    ]},
-  ]},
-  { cat:"Mesh Cleanup", catPl:"Czyszczenie siatki", emoji:"🧹", groups:[
-    { label:"Normals", labelPl:"Normalne", items:[
-      { keys:["Shift","N"], combo:true, action:"Recalculate normals outside", actionPl:"Przelicz normalne na zewnątrz", hint:"fix non-manifold first", hintPl:"najpierw napraw non-manifold", doc:"modeling/meshes/editing/mesh/normals.html" },
-      { keys:["Ctrl","Shift","N"], combo:true, action:"Recalculate normals inside", actionPl:"Przelicz normalne do wewnątrz", doc:"modeling/meshes/editing/mesh/normals.html" },
-      { keys:["Alt","N"], combo:true, action:"Normals menu (flip…)", actionPl:"Menu normalnych (flip…)", doc:"modeling/meshes/editing/mesh/normals.html" },
-    ]},
-    { label:"Triangles & quads", labelPl:"Trójkąty i quady", items:[
-      { keys:["Ctrl","T"], combo:true, action:"Triangulate faces", actionPl:"Trianguluj ściany", doc:"modeling/meshes/editing/face/triangulate_faces.html" },
-      { keys:["Alt","J"], combo:true, action:"Tris to quads", actionPl:"Trójkąty na quady", hint:"Ctrl+T → Alt+J fixes n-gons in bulk", hintPl:"Ctrl+T → Alt+J hurtowo naprawia n-gony", doc:"modeling/meshes/editing/face/triangles_quads.html" },
-    ]},
-    { label:"Find problems (no default key)", labelPl:"Wyszukaj błędy (bez skrótu)", items:[
-      { keys:["F3"], action:"Select Non Manifold", actionPl:"Zaznacz non-manifold", hint:"holes, 3+ face edges · vertex/edge mode only", hintPl:"dziury, krawędzie z 3+ ścianami · tylko tryb wierzchołków/krawędzi", doc:"modeling/meshes/selecting/all_by_trait.html" },
-      { keys:["F3"], action:"Select Interior Faces", actionPl:"Zaznacz ściany wewnętrzne", hint:"type the name in F3 · Select ▸ Select All by Trait", hintPl:"wpisz nazwę w F3", doc:"modeling/meshes/selecting/all_by_trait.html" },
-      { keys:["F3"], action:"Select Faces by Sides", actionPl:"Zaznacz ściany wg liczby boków", hint:"Greater Than 4 = n-gons", hintPl:"Greater Than 4 = n-gony", doc:"modeling/meshes/selecting/all_by_trait.html" },
-    ]},
-    { label:"Clean Up menu (no default key)", labelPl:"Menu Clean Up (bez skrótu)", items:[
-      { keys:["F3"], action:"Delete Loose", actionPl:"Usuń luźną geometrię", hint:"type the name in F3 · Mesh ▸ Clean Up", hintPl:"wpisz nazwę w F3", doc:"modeling/meshes/editing/mesh/cleanup.html" },
-      { keys:["F3"], action:"Degenerate Dissolve", actionPl:"Rozpuść zdegenerowane", hint:"zero-length edges, zero-area faces", hintPl:"krawędzie o zerowej długości, ściany o zerowym polu", doc:"modeling/meshes/editing/mesh/cleanup.html" },
-      { keys:["F3"], action:"Fill Holes", actionPl:"Wypełnij dziury", hint:"type the name in F3 · Mesh ▸ Clean Up", hintPl:"wpisz nazwę w F3", doc:"modeling/meshes/editing/mesh/cleanup.html" },
-      { keys:["F3"], action:"Limited Dissolve", actionPl:"Rozpuszczanie ograniczone", hint:"merges coplanar faces · makes n-gons", hintPl:"łączy ściany w jednej płaszczyźnie · tworzy n-gony", doc:"modeling/meshes/editing/mesh/delete.html" },
-    ]},
-    { label:"Patch & bridge (no default key)", labelPl:"Łatanie i mostki (bez skrótu)", items:[
-      { keys:["F3"], action:"Grid Fill", actionPl:"Wypełnij siatką (grid fill)", hint:"quads instead of a triangle fan · even edge count", hintPl:"quady zamiast wachlarza trójkątów · parzysta liczba krawędzi", doc:"modeling/meshes/editing/face/grid_fill.html" },
-      { keys:["F3"], action:"Bridge Edge Loops", actionPl:"Połącz pętle krawędzi (bridge)", doc:"modeling/meshes/editing/edge/bridge_edge_loops.html" },
-    ]},
-  ]},
-  { cat:"Sculpt Mode", catPl:"Tryb Sculpt", emoji:"🗿", groups:[
-    { label:"Brush", labelPl:"Pędzel", items:[
-      { keys:["F"], action:"Change brush size", actionPl:"Zmień rozmiar pędzla", hint:"move mouse, click to set", hintPl:"rusz myszą, kliknij by ustawić", doc:"sculpt_paint/sculpting/tool_settings/brush_settings.html" },
-      { keys:["Shift","F"], combo:true, action:"Change brush strength", actionPl:"Zmień siłę pędzla", doc:"sculpt_paint/sculpting/tool_settings/brush_settings.html" },
-      { keys:["Ctrl","F"], combo:true, action:"Rotate brush texture", actionPl:"Obróć teksturę pędzla", doc:"sculpt_paint/sculpting/tool_settings/brush_settings.html" },
-      { keys:["Shift"], action:"Smooth brush (hold)", actionPl:"Pędzel wygładzający (przytrzymaj)", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["Ctrl"], action:"Invert brush (hold)", actionPl:"Odwróć działanie pędzla (przytrzymaj)", doc:"sculpt_paint/brush/introduction.html" },
-    ]},
-    { label:"Brush shortcuts", labelPl:"Skróty pędzli", items:[
-      { keys:["V"], action:"Draw brush", actionPl:"Pędzel rysujący", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["S"], action:"Smooth brush", actionPl:"Pędzel wygładzający", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["G"], action:"Grab brush", actionPl:"Pędzel chwytający", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["C"], action:"Clay strips brush", actionPl:"Pędzel clay strips", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["Shift","C"], combo:true, action:"Crease brush", actionPl:"Pędzel crease (bruzda)", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["K"], action:"Snake hook brush", actionPl:"Pędzel snake hook", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["I"], action:"Inflate / deflate brush", actionPl:"Pędzel nadmuchujący / spłaszczający", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["P"], action:"Pinch / magnify brush", actionPl:"Pędzel ściskający / powiększający", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["Shift","T"], combo:true, action:"Scrape / fill brush", actionPl:"Pędzel scrape / fill", doc:"sculpt_paint/brush/introduction.html" },
-      { keys:["Shift","Space"], combo:true, action:"Brush asset popup", actionPl:"Wybór pędzla (asset shelf)", doc:"sculpt_paint/brush/introduction.html" },
-    ]},
-    { label:"Masking", labelPl:"Maskowanie", items:[
-      { keys:["M"], action:"Mask brush (toggle)", actionPl:"Pędzel maski (przełącz)", doc:"sculpt_paint/sculpting/editing/mask.html" },
-      { keys:["Alt","Click"], combo:true, action:"Paint mask with any brush", actionPl:"Maluj maskę dowolnym pędzlem", hint:"Ctrl+Alt+Click erases mask", hintPl:"Ctrl+Alt+Click zmazuje maskę", doc:"sculpt_paint/sculpting/editing/mask.html" },
-      { keys:["A"], action:"Mask pie menu", actionPl:"Pie menu maski", doc:"sculpt_paint/sculpting/editing/mask.html" },
-      { keys:["B"], action:"Box mask", actionPl:"Maskowanie prostokątem", doc:"sculpt_paint/sculpting/editing/mask.html" },
-      { keys:["Ctrl","I"], combo:true, action:"Invert mask", actionPl:"Odwróć maskę", doc:"sculpt_paint/sculpting/editing/mask.html" },
-      { keys:["Alt","M"], combo:true, action:"Clear mask", actionPl:"Wyczyść maskę", doc:"sculpt_paint/sculpting/editing/mask.html" },
-    ]},
-    { label:"Remesh", labelPl:"Przebudowa siatki", items:[
-      { keys:["Ctrl","R"], combo:true, action:"Voxel remesh", actionPl:"Voxel remesh (przebuduj siatkę)", doc:"modeling/meshes/retopology.html" },
-      { keys:["R"], action:"Edit voxel size (interactive)", actionPl:"Ustaw rozmiar voxela (interaktywnie)", hint:"detail size with Dyntopo", hintPl:"rozmiar detalu przy Dyntopo", doc:"modeling/meshes/retopology.html" },
-    ]},
-  ]},
-  { cat:"Texture Paint", catPl:"Malowanie tekstur", emoji:"🖌", groups:[
-    { label:"Brush", labelPl:"Pędzel", items:[
-      { keys:["F"], action:"Change brush size", actionPl:"Zmień rozmiar pędzla", doc:"sculpt_paint/brush/brush_settings.html" },
-      { keys:["Shift","F"], combo:true, action:"Change brush strength", actionPl:"Zmień siłę pędzla", doc:"sculpt_paint/brush/brush_settings.html" },
-      { keys:["Ctrl","F"], combo:true, action:"Rotate brush texture", actionPl:"Obróć teksturę pędzla", doc:"sculpt_paint/brush/brush_settings.html" },
-      { keys:["Shift","Space"], combo:true, action:"Brush asset popup", actionPl:"Wybór pędzla (asset shelf)", hint:"brushes are assets since 4.3", hintPl:"pędzle są assetami od 4.3", doc:"sculpt_paint/texture_paint/index.html" },
-    ]},
-    { label:"Color & mask", labelPl:"Kolor i maska", items:[
-      { keys:["X"], action:"Swap primary / secondary color", actionPl:"Zamień kolor główny / dodatkowy", doc:"sculpt_paint/brush/brush_settings.html" },
-      { keys:["Shift","X"], combo:true, action:"Sample color", actionPl:"Pobierz kolor (próbnik)", hint:"Ctrl+Shift+X samples merged", hintPl:"Ctrl+Shift+X pobiera z połączonych warstw", doc:"sculpt_paint/brush/brush_settings.html" },
-      { keys:["1"], action:"Toggle face selection mask", actionPl:"Przełącz maskę zaznaczonych ścian", hint:"paint only faces selected in Edit Mode", hintPl:"maluj tylko ściany zaznaczone w Edit Mode", doc:"sculpt_paint/selection_visibility.html" },
-    ]},
-    { label:"Save textures", labelPl:"Zapis tekstur", items:[
-      { keys:["Alt","S"], combo:true, action:"Save image", actionPl:"Zapisz obraz", hint:"Image Editor · Ctrl+S saves only the .blend", hintPl:"Image Editor · Ctrl+S zapisuje tylko .blend", doc:"editors/image/editing.html" },
-      { keys:["Shift","Alt","S"], combo:true, action:"Save image as…", actionPl:"Zapisz obraz jako…", doc:"editors/image/editing.html" },
-    ]},
-  ]},
-  { cat:"Grease Pencil", catPl:"Grease Pencil", emoji:"✏️", groups:[
-    { label:"Modes & camera", labelPl:"Tryby i kamera", items:[
-      { keys:["Ctrl","Tab"], combo:true, action:"Mode pie → Draw Mode", actionPl:"Pie menu trybów → Draw Mode", doc:"grease_pencil/modes/draw/introduction.html" },
-      { keys:["Tab"], action:"Toggle Edit Mode", actionPl:"Przełącz Edit Mode", hint:"from Draw Mode Tab goes to Edit and back", hintPl:"z Draw Mode Tab przechodzi do Edit i z powrotem", doc:"grease_pencil/modes/draw/introduction.html" },
-      { keys:["Numpad 0"], action:"Camera view — draw through the camera", actionPl:"Widok z kamery — rysuj przez kamerę", hint:"static camera: Stroke Placement ▸ Surface · parented: Origin", hintPl:"stała kamera: Stroke Placement ▸ Surface · podpięty: Origin", doc:"grease_pencil/modes/draw/stroke_placement.html" },
-    ]},
-    { label:"Drawing", labelPl:"Rysowanie", items:[
-      { keys:["Ctrl"], action:"Erase while drawing (hold)", actionPl:"Gumka podczas rysowania (przytrzymaj)", doc:"grease_pencil/modes/draw/brushes/draw.html" },
-      { keys:["Shift"], action:"Smooth while drawing (hold)", actionPl:"Wygładzanie podczas rysowania (przytrzymaj)", doc:"grease_pencil/modes/draw/brushes/draw.html" },
-      { keys:["B"], action:"Box erase", actionPl:"Gumka prostokątem", doc:"grease_pencil/modes/draw/editing.html" },
-      { keys:["F"], action:"Change brush size", actionPl:"Zmień rozmiar pędzla", hint:"Shift+F = strength", hintPl:"Shift+F = siła", doc:"grease_pencil/modes/draw/brushes/draw.html" },
-      { keys:["X"], action:"Swap primary / secondary color", actionPl:"Zamień kolor główny / dodatkowy", hint:"Shift+X samples a color", hintPl:"Shift+X pobiera kolor", doc:"grease_pencil/modes/draw/tool_settings/color.html" },
-      { keys:["Shift","Space"], combo:true, action:"Brush asset popup", actionPl:"Wybór pędzla (asset shelf)", doc:"grease_pencil/modes/draw/brushes/draw.html" },
-    ]},
-    { label:"Frame by frame", labelPl:"Klatka po klatce", items:[
-      { keys:["Shift","I"], combo:true, action:"Insert blank keyframe", actionPl:"Wstaw pustą klatkę kluczową", hint:"active layer · always empty, even with Additive Drawing", hintPl:"aktywna warstwa · zawsze pusta, nawet z Additive Drawing", doc:"grease_pencil/animation/tools.html" },
-      { keys:["I"], action:"Keyframe menu", actionPl:"Menu klatek kluczowych", hint:"Duplicate Active Keyframe = copy of previous drawing", hintPl:"Duplicate Active Keyframe = kopia poprzedniego rysunku", doc:"grease_pencil/animation/tools.html" },
-      { keys:["Alt","I"], combo:true, action:"Delete keyframes menu", actionPl:"Menu usuwania klatek", doc:"grease_pencil/animation/tools.html" },
-      { keys:["Ctrl","E"], combo:true, action:"Interpolate between keyframes", actionPl:"Interpoluj między klatkami", hint:"Ctrl+Shift+E = whole sequence", hintPl:"Ctrl+Shift+E = cała sekwencja", doc:"grease_pencil/animation/tools.html" },
-    ]},
-    { label:"Layers", labelPl:"Warstwy", items:[
-      { keys:["Y"], action:"Set active layer", actionPl:"Wybierz aktywną warstwę", hint:"one layer per element, e.g. Flower", hintPl:"jedna warstwa na element, np. Flower", doc:"grease_pencil/properties/layers.html" },
-      { keys:["Numpad *"], action:"Isolate active layer", actionPl:"Izoluj aktywną warstwę", doc:"editors/dope_sheet/modes/grease_pencil.html" },
-      { keys:["Ctrl","Shift","M"], combo:true, action:"Merge layer down", actionPl:"Scal warstwę w dół", doc:"grease_pencil/properties/layers.html" },
-      { keys:["U"], action:"Set active material", actionPl:"Wybierz aktywny materiał", doc:"grease_pencil/materials/properties.html" },
-    ]},
-    { label:"Stick to camera", labelPl:"Przyklejenie do kamery", items:[
-      { keys:["Ctrl","P"], combo:true, action:"Parent to camera — Object (Keep Transform)", actionPl:"Podepnij do kamery — Object (Keep Transform)", hint:"select GP, then Shift-click the camera last", hintPl:"zaznacz GP, potem Shift-klik na kamerę jako ostatnią", doc:"scene_layout/object/editing/parent.html" },
-      { keys:["Alt","P"], combo:true, action:"Unparent — Clear and Keep Transformation", actionPl:"Odepnij — Clear and Keep Transformation", hint:"drawing stays where it is in the world", hintPl:"rysunek zostaje w miejscu w świecie", doc:"scene_layout/object/editing/parent.html" },
-    ]},
-  ]},
-  { cat:"Selection", catPl:"Zaznaczanie", emoji:"🎯", groups:[
-    { label:"Basics", labelPl:"Podstawy", items:[
-      { keys:["A"], action:"Select all", actionPl:"Zaznacz wszystko", doc:"scene_layout/object/selecting.html" },
-      { keys:["Alt","A"], combo:true, action:"Deselect all", actionPl:"Odznacz wszystko", doc:"scene_layout/object/selecting.html" },
-      { keys:["Ctrl","I"], combo:true, action:"Invert selection", actionPl:"Odwróć zaznaczenie", doc:"scene_layout/object/selecting.html" },
-      { keys:["Shift","Click"], combo:true, action:"Add / remove from selection", actionPl:"Dodaj / usuń z zaznaczenia", doc:"scene_layout/object/selecting.html" },
-    ]},
-    { label:"Select tools", labelPl:"Narzędzia zaznaczania", items:[
-      { keys:["B"], action:"Box select", actionPl:"Zaznaczanie prostokątem", doc:"scene_layout/object/selecting.html" },
-      { keys:["C"], action:"Circle select", actionPl:"Zaznaczanie okręgiem", hint:"scroll to resize", hintPl:"scroll zmienia rozmiar", doc:"scene_layout/object/selecting.html" },
-      { keys:["Ctrl","Click+Drag"], combo:true, action:"Lasso select", actionPl:"Zaznaczanie lasso", doc:"scene_layout/object/selecting.html" },
-    ]},
-    { label:"Linked & grow", labelPl:"Połączone i powiększanie", items:[
-      { keys:["L"], action:"Select linked (hover)", actionPl:"Zaznacz połączone (pod kursorem)", doc:"modeling/meshes/selecting/linked.html" },
-      { keys:["Ctrl","L"], combo:true, action:"Select linked (selected)", actionPl:"Zaznacz połączone (z zaznaczenia)", doc:"modeling/meshes/selecting/linked.html" },
-      { keys:["Ctrl","Numpad +"], combo:true, action:"Grow selection", actionPl:"Powiększ zaznaczenie", doc:"modeling/meshes/selecting/more_less.html" },
-      { keys:["Ctrl","Numpad -"], combo:true, action:"Shrink selection", actionPl:"Zmniejsz zaznaczenie", doc:"modeling/meshes/selecting/more_less.html" },
-    ]},
-  ]},
-  { cat:"Animation", catPl:"Animacja", emoji:"🎞", groups:[
-    { label:"Keyframes", labelPl:"Klatki kluczowe", items:[
-      { keys:["I"], action:"Insert keyframe", actionPl:"Wstaw klatkę kluczową", doc:"animation/keyframes/editing.html" },
-      { keys:["Alt","I"], combo:true, action:"Delete keyframe", actionPl:"Usuń klatkę kluczową", doc:"animation/keyframes/editing.html" },
-      { keys:["T"], action:"Set keyframe interpolation", actionPl:"Ustaw interpolację klatek", hint:"in Graph/Dopesheet", hintPl:"w Graph/Dopesheet", doc:"editors/graph_editor/fcurves/editing.html" },
-      { keys:["Ctrl","Click"], combo:true, action:"Add keyframe (graph)", actionPl:"Dodaj klatkę (graph)", doc:"editors/graph_editor/fcurves/editing.html" },
-    ]},
-    { label:"Playback", labelPl:"Odtwarzanie", items:[
-      { keys:["Space"], action:"Play / pause animation", actionPl:"Odtwórz / pauza animacji", hint:"default keymap", hintPl:"domyślny keymap", doc:"editors/timeline.html" },
-      { keys:["←"], action:"Previous frame", actionPl:"Poprzednia klatka", doc:"editors/timeline.html" },
-      { keys:["→"], action:"Next frame", actionPl:"Następna klatka", doc:"editors/timeline.html" },
-    ]},
-    { label:"Timeline jumps", labelPl:"Skoki na osi czasu", items:[
-      { keys:["↑"], action:"Jump to next keyframe", actionPl:"Skok do następnej klatki kluczowej", doc:"editors/timeline.html" },
-      { keys:["↓"], action:"Jump to previous keyframe", actionPl:"Skok do poprzedniej klatki kluczowej", doc:"editors/timeline.html" },
-      { keys:["Shift","←"], combo:true, action:"Jump to start frame", actionPl:"Skok do pierwszej klatki", doc:"editors/timeline.html" },
-      { keys:["Shift","→"], combo:true, action:"Jump to end frame", actionPl:"Skok do ostatniej klatki", doc:"editors/timeline.html" },
-    ]},
-  ]},
-  { cat:"Navigation & View", catPl:"Nawigacja i widok", emoji:"🧭", groups:[
-    { label:"Orbit, pan, zoom", labelPl:"Obrót, przesuń, zoom", items:[
-      { keys:["MMB"], action:"Orbit view", actionPl:"Obracaj widok", hint:"middle mouse drag", hintPl:"przeciągnij środkowym przyciskiem", doc:"editors/3dview/navigate/navigation.html" },
-      { keys:["Shift","MMB"], combo:true, action:"Pan view", actionPl:"Przesuń widok", doc:"editors/3dview/navigate/navigation.html" },
-      { keys:["Scroll"], action:"Zoom in / out", actionPl:"Przybliż / oddal", doc:"editors/3dview/navigate/navigation.html" },
-      { keys:["Numpad ."], action:"Frame selected", actionPl:"Wykadruj zaznaczone", doc:"editors/3dview/navigate/navigation.html" },
-      { keys:["Home"], action:"Frame all", actionPl:"Wykadruj wszystko", doc:"editors/3dview/navigate/navigation.html" },
-    ]},
-    { label:"Orthographic views", labelPl:"Widoki ortho", items:[
-      { keys:["Numpad 1"], action:"Front view", actionPl:"Widok z przodu", doc:"editors/3dview/navigate/views.html" },
-      { keys:["Ctrl","Numpad 1"], combo:true, action:"Back view", actionPl:"Widok z tyłu", doc:"editors/3dview/navigate/views.html" },
-      { keys:["Numpad 3"], action:"Right view", actionPl:"Widok z prawej", doc:"editors/3dview/navigate/views.html" },
-      { keys:["Numpad 7"], action:"Top view", actionPl:"Widok z góry", doc:"editors/3dview/navigate/views.html" },
-      { keys:["Numpad 5"], action:"Toggle perspective / ortho", actionPl:"Przełącz perspektywę / orto", doc:"editors/3dview/navigate/projections.html" },
-      { keys:["Numpad 0"], action:"Camera view", actionPl:"Widok z kamery", doc:"editors/3dview/navigate/camera_view.html" },
-    ]},
-    { label:"Pie menus & isolate", labelPl:"Pie menu i izolacja", items:[
-      { keys:["~"], action:"View pie menu", actionPl:"Pie menu widoków", doc:"editors/3dview/navigate/views.html" },
-      { keys:["Z"], action:"Shading pie menu", actionPl:"Pie menu cieniowania", doc:"editors/3dview/display/shading.html" },
-      { keys:["/"], action:"Local / isolate view", actionPl:"Widok lokalny / izolacja", doc:"editors/3dview/navigate/local_view.html" },
-      { keys:["Numpad /"], action:"Toggle local view", actionPl:"Przełącz widok lokalny", doc:"editors/3dview/navigate/local_view.html" },
-    ]},
-  ]},
-  { cat:"UV & Texturing", catPl:"UV i tekstury", emoji:"🗺", groups:[
-    { label:"Unwrap", labelPl:"Rozwijanie", items:[
-      { keys:["U"], action:"Unwrap menu", actionPl:"Menu rozwijania (unwrap)", doc:"modeling/meshes/uv/unwrapping/index.html" },
-      { keys:["Ctrl","E"], combo:true, action:"Mark / clear seam", actionPl:"Zaznacz / usuń seam", hint:"Edge menu", hintPl:"Menu krawędzi", doc:"modeling/meshes/uv/unwrapping/seams.html" },
-      { keys:["P"], action:"Pin UV", actionPl:"Przypnij UV", hint:"in UV editor", hintPl:"w edytorze UV", doc:"modeling/meshes/uv/editing.html" },
-      { keys:["Alt","P"], combo:true, action:"Unpin UV", actionPl:"Odepnij UV", doc:"modeling/meshes/uv/editing.html" },
-    ]},
-    { label:"UV editor", labelPl:"Edytor UV", items:[
-      { keys:["L"], action:"Select linked UVs", actionPl:"Zaznacz połączone UV", doc:"editors/uv/index.html" },
-      { keys:["G"], action:"Move UVs", actionPl:"Przesuń UV", doc:"editors/uv/index.html" },
-      { keys:["S"], action:"Scale UVs", actionPl:"Skaluj UV", doc:"editors/uv/index.html" },
-      { keys:["Alt","V"], combo:true, action:"Stitch UVs", actionPl:"Zszyj UV", doc:"modeling/meshes/uv/editing.html" },
-      { keys:["V"], action:"Rip UVs", actionPl:"Rozerwij UV (rip)", doc:"modeling/meshes/uv/editing.html" },
-      { keys:["Y"], action:"Split selection to new island", actionPl:"Oderwij zaznaczenie w nową wyspę", doc:"modeling/meshes/uv/editing.html" },
-    ]},
-    { label:"Islands", labelPl:"Wyspy UV", items:[
-      { keys:["Ctrl","A"], combo:true, action:"Average islands scale", actionPl:"Wyrównaj skalę wysp", hint:"even texel density", hintPl:"równa gęstość tekseli", doc:"modeling/meshes/uv/editing.html" },
-      { keys:["Ctrl","P"], combo:true, action:"Pack islands", actionPl:"Spakuj wyspy", hint:"set Margin for bake resolution", hintPl:"ustaw Margin pod rozdzielczość bake'u", doc:"modeling/meshes/uv/editing.html" },
-      { keys:["Ctrl","V"], combo:true, action:"Minimize stretch", actionPl:"Zminimalizuj rozciągnięcie", hint:"pin (P) what must stay", hintPl:"przypnij (P) to, co ma zostać", doc:"modeling/meshes/uv/editing.html" },
-    ]},
-  ]},
-  { cat:"Shader Nodes", catPl:"Edytor węzłów", emoji:"🎨", groups:[
-    { label:"Add & connect", labelPl:"Dodaj i połącz", items:[
-      { keys:["Shift","A"], combo:true, action:"Add node", actionPl:"Dodaj węzeł", doc:"interface/controls/nodes/editing.html" },
-      { keys:["F"], action:"Make link / connect nodes", actionPl:"Połącz węzły", doc:"interface/controls/nodes/editing.html" },
-      { keys:["Ctrl","Click+Drag"], combo:true, action:"Cut links", actionPl:"Przetnij połączenia", doc:"interface/controls/nodes/editing.html" },
-      { keys:["Ctrl","X"], combo:true, action:"Delete & reconnect", actionPl:"Usuń i połącz ponownie", doc:"interface/controls/nodes/editing.html" },
-    ]},
-    { label:"Organize nodes", labelPl:"Porządkowanie węzłów", items:[
-      { keys:["M"], action:"Mute node", actionPl:"Wycisz węzeł", doc:"interface/controls/nodes/editing.html" },
-      { keys:["H"], action:"Collapse / hide node", actionPl:"Zwiń / ukryj węzeł", doc:"interface/controls/nodes/parts.html" },
-      { keys:["Ctrl","J"], combo:true, action:"Frame selected nodes", actionPl:"Otocz ramką zaznaczone", doc:"interface/controls/nodes/editing.html" },
-      { keys:["Ctrl","G"], combo:true, action:"Group nodes", actionPl:"Grupuj węzły", doc:"interface/controls/nodes/groups.html" },
-      { keys:["Tab"], action:"Enter / exit node group", actionPl:"Wejdź / wyjdź z grupy", doc:"interface/controls/nodes/groups.html" },
-    ]},
-  ]},
-];
+<div class="quiz" id="quiz" role="dialog" aria-modal="true" aria-labelledby="quizTitle" hidden>
+  <div class="quiz-card" id="quizCard"></div>
+</div>
 
-// ---- render ----
-const sectionsEl = document.getElementById('sections');
-const chipsEl = document.getElementById('chips');
-let total = 0;
-
-function renderKeys(it){
-  const sep = it.combo ? '<span class="plus">+</span>' : '';
-  return it.keys.map(k=>`<kbd>${k}</kbd>`).join(sep);
-}
-
-function renderRow(it){
-  const href = it.doc ? DOCS+it.doc : null;
-  const text = (it.action+' '+it.actionPl+' '+it.keys.join(' ')+' '+(it.hint||'')+' '+(it.hintPl||'')).toLowerCase();
-  const inner = `
-      <div class="keys">${renderKeys(it)}</div>
-      <div class="action">${it.action}<span class="pl">${it.actionPl}</span>${it.hint?`<span class="hint">${it.hint}<span class="pl"> · ${it.hintPl}</span></span>`:''}</div>
-      <svg class="doc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>`;
-  return href
-    ? `<a class="row" href="${href}" target="_blank" rel="noopener" title="Open Blender manual · Otwórz dokumentację" data-text="${text}">${inner}</a>`
-    : `<div class="row" data-text="${text}">${inner}</div>`;
-}
-
-DATA.forEach((c,i)=>{
-  const catCount = c.groups.reduce((n,g)=>n+g.items.length,0);
-  total += catCount;
-  const sec = document.createElement('section');
-  sec.className='cat'; sec.dataset.cat=c.cat; sec.id='cat-'+i;
-  sec.innerHTML = `
-    <div class="cat-head">
-      <div class="emoji">${c.emoji}</div>
-      <h2>${c.cat}<span class="pl">${c.catPl}</span></h2>
-      <span class="count">${catCount} shortcuts<br><span class="pl">skrótów</span></span>
-    </div>
-    ${c.groups.map(g=>`
-      <div class="subgroup">
-        <span class="sub-tag">${g.label}<span class="pl">${g.labelPl}</span></span>
-        <div class="grid">${g.items.map(renderRow).join('')}</div>
-      </div>`).join('')}`;
-  sectionsEl.appendChild(sec);
-});
-
-// count hero too
-total += 3;
-document.getElementById('total').textContent = total;
-
-// chips
-const cats = [{en:'All',pl:'Wszystkie'}, ...DATA.map(c=>({en:c.cat,pl:c.catPl}))];
-const emojis = ['✦', ...DATA.map(c=>c.emoji)];
-cats.forEach((name,i)=>{
-  const chip=document.createElement('button');
-  chip.className='chip'+(i===0?' active':'');
-  chip.innerHTML=`<span class="emoji">${emojis[i]}</span>${name.en}`;
-  chip.title=name.pl;
-  chip.onclick=()=>{
-    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-    chip.classList.add('active');
-    filterCat(name.en);
-  };
-  chipsEl.appendChild(chip);
-});
-
-function filterCat(name){
-  document.getElementById('search').value='';
-  document.querySelectorAll('.row').forEach(r=>r.style.display='');
-  document.querySelectorAll('.subgroup').forEach(s=>s.style.display='');
-  const jkl=document.querySelector('.jkl');
-  document.querySelectorAll('.cat').forEach(sec=>{
-    const show = name==='All' || sec.dataset.cat===name;
-    sec.style.display = show?'':'none';
-  });
-  jkl.style.display = (name==='All'||name==='General')?'':'none';
-  document.getElementById('noResults').classList.remove('show');
-}
-
-// search
-const searchEl=document.getElementById('search');
-searchEl.addEventListener('input',()=>{
-  const q=searchEl.value.trim().toLowerCase();
-  if(q){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));}
-  document.querySelector('.jkl').style.display = q?'none':'';
-  let any=false;
-  document.querySelectorAll('.cat').forEach(sec=>{
-    let visible=0;
-    sec.querySelectorAll('.subgroup').forEach(sg=>{
-      let sgVis=0;
-      sg.querySelectorAll('.row').forEach(r=>{
-        const match = !q || r.dataset.text.includes(q);
-        r.style.display=match?'':'none';
-        if(match)sgVis++;
-      });
-      sg.style.display = sgVis>0?'':'none';
-      visible+=sgVis;
-    });
-    sec.style.display = visible>0?'':'none';
-    if(visible>0)any=true;
-  });
-  if(!q){filterCat('All');document.querySelector('.chip').classList.add('active');}
-  document.getElementById('noResults').classList.toggle('show',!any && !!q);
-});
-
-// theme
-const themeBtn=document.getElementById('theme');
-const root=document.documentElement;
-const moon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
-const sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2M12 20.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1.5 12h2M20.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>';
-function setTheme(t){root.setAttribute('data-theme',t);themeBtn.innerHTML=t==='light'?sun:moon;localStorage.setItem('theme',t);}
-setTheme(localStorage.getItem('theme')|| (matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
-themeBtn.onclick=()=>setTheme(root.getAttribute('data-theme')==='light'?'dark':'light');
-
-// sticky border
-const controls=document.getElementById('controls');
-addEventListener('scroll',()=>controls.classList.toggle('stuck',scrollY>controls.offsetTop+10));
-
-// keyboard: "/" focuses search
-addEventListener('keydown',e=>{
-  if(e.key==='/'&&document.activeElement!==searchEl){e.preventDefault();searchEl.focus();}
-  if(e.key==='Escape'){searchEl.value='';searchEl.dispatchEvent(new Event('input'));searchEl.blur();}
-});
-</script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
 </body>
 </html>
